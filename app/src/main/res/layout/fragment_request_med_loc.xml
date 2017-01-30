@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/teal100">
+
+    <Spinner
+        android:id="@+id/spinner_pharma_loc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_vertical_margin">
+    </Spinner>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerViewPharmaLoc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/recycler_view_selector"
+        android:layout_weight="1"
+        android:layout_margin="@dimen/activity_horizontal_margin">
+    </android.support.v7.widget.RecyclerView>
+    <Button
+        android:id="@+id/button_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/teal300"
+        android:text="NEXT"/>
+</LinearLayout>

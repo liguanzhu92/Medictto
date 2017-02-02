@@ -5,99 +5,105 @@ package com.svs.myprojects.mymedicalrecords.patientrecord.makereservation;
  */
 public
 class DoctorDetail {
-    String doctorName;
-    String doctorSpeciality;
-    String doctorQualification;
-    String imageUrl;
-    String operationHours;
-    String address;
-    String phoneNum;
-    String emailId;
-    String rating;
+    private String mDoctorID;
+    private String mDoctorName;
+    private String mDoctorSpeciality;
+    private String mDoctorQualification;
+    private String mImageUrl;
+    private String mExperience;
+    private String mArea;
+    private String mAddress;
+    private String mPhoneNum;
+    private String mEmail;
+    private String mRating;
+
+    public DoctorDetail() {}
+
+    public String getDoctorID() {
+        return mDoctorID;
+    }
+
+    public String getExperience() {
+        return mExperience;
+    }
+
+    public void setExperience(String experience) {
+        mExperience = experience;
+    }
+
+    public void setDoctorID(String doctorID) {
+        mDoctorID = doctorID;
+    }
 
     public String getRating() {
-        return rating;
+        return mRating;
     }
 
     public void setRating(String rating) {
-        this.rating = rating;
+        mRating = rating;
     }
 
     public String getAddress() {
-        return address;
+        return mAddress;
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        mAddress = address;
     }
 
     public String getPhoneNum() {
-        return phoneNum;
+        return mPhoneNum;
     }
 
     public void setPhoneNum(String phoneNum) {
-        this.phoneNum = phoneNum;
+        mPhoneNum = phoneNum;
     }
 
-    public String getEmailId() {
-        return emailId;
+    public String getEmail() {
+        return mEmail;
     }
 
-    public void setEmailId(String emailId) {
-        this.emailId = emailId;
-    }
-
-    public DoctorDetail(String doctorName, String doctorSpeciality, String doctorQualification,
-                        String imageUrl, String operationHours, String address, String phoneNum,
-                        String emailId, String rating) {
-        this.doctorName = doctorName;
-        this.doctorSpeciality = doctorSpeciality;
-        this.doctorQualification = doctorQualification;
-        this.imageUrl = imageUrl;
-        this.operationHours = operationHours;
-        this.address = address;
-        this.phoneNum = phoneNum;
-        this.emailId = emailId;
-        this.rating = rating;
+    public void setEmail(String email) {
+        mEmail = email;
     }
 
     public String getDoctorName() {
-        return doctorName;
+        return mDoctorName;
     }
 
     public void setDoctorName(String doctorName) {
-        this.doctorName = doctorName;
+        mDoctorName = doctorName;
     }
 
     public String getDoctorSpeciality() {
-        return doctorSpeciality;
+        return mDoctorSpeciality;
     }
 
     public void setDoctorSpeciality(String doctorSpeciality) {
-        this.doctorSpeciality = doctorSpeciality;
+        mDoctorSpeciality = doctorSpeciality;
     }
 
     public String getDoctorQualification() {
-        return doctorQualification;
+        return mDoctorQualification;
     }
 
     public void setDoctorQualification(String doctorQualification) {
-        this.doctorQualification = doctorQualification;
+        this.mDoctorQualification = doctorQualification;
     }
 
     public String getImageUrl() {
-        return imageUrl;
+        return mImageUrl;
     }
 
     public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+        this.mImageUrl = imageUrl;
     }
 
-    public String getOperationHours() {
-        return operationHours;
+    public String getArea() {
+        return mArea;
     }
 
-    public void setOperationHours(String operationHours) {
-        this.operationHours = operationHours;
+    public void setArea(String area) {
+        this.mArea = area;
     }
 }

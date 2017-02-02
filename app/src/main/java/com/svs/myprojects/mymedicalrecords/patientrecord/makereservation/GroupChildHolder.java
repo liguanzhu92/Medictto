@@ -4,7 +4,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 public class GroupChildHolder {
-    TextView title;
+    TextView address;
     TextView hint;
     Button buttonBookAppointment;
 }

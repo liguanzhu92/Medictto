@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:ellipsize="marquee"
-    android:singleLine="true"
     android:text="sss"
     android:textSize="20sp"
     android:background="@drawable/text_background"

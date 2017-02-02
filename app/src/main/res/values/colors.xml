@@ -22,6 +22,9 @@
     <color name="tealA400">#1DE9B6</color>
     <color name="tealA700">#00BFA5</color>
 
+    <color name="primary_text">#212121</color>
+    <color name="secondary_text">#757575</color>
+
 
 
 </resources>

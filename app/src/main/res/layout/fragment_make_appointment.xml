@@ -1,135 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/teal700"
-    android:orientation="vertical">
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:background="@color/teal50"
+             android:orientation="vertical">
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.2"
-        android:scaleType="centerCrop"
-        android:src="@drawable/medicine" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:orientation="horizontal">
-                <ImageView
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:id="@+id/doctor_image"/>
-                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:orientation="vertical">
-                    <!-- Doctor details Name and email id for which you are booking -->
-                    <TextView
+
+                <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/activity_vertical_margin"
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:orientation="horizontal">
+                    <ImageView
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:id="@+id/doctor_image"/>
+                    <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                            android:orientation="vertical">
+                        <!-- Doctor details Name and email id for which you are booking -->
+                        <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/text_view_padding"
+                                android:textSize="25sp"
+                                android:text="Doc name"
+                                android:textStyle="bold"
+                                android:id="@+id/doctor_name"/>
+                        <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/text_view_padding"
+                                android:textSize="15sp"
+                                android:text="Doc email"
+                                android:id="@+id/doctor_email"/>
+                        <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/text_view_padding"
+                                android:textSize="15sp"
+                                android:text="Doc phone"
+                                android:id="@+id/doctor_phone"/>
+                    </LinearLayout>
+
+                </LinearLayout>
+                <CalendarView
+                        android:id="@+id/make_appointment_calendar"
+                        android:minDate="01/01/2017"
+                        android:maxDate="12/31/2017"
+                        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+                <!-- Booking time slots for which timings are available/booked-->
+                <HorizontalScrollView
+                        android:id="@+id/time_slots"
                         android:layout_marginTop="@dimen/text_view_padding"
-                        android:textSize="25sp"
-                        android:text="Doc name"
-                        android:textColor="@android:color/white"
-                        android:textStyle="bold"
-                        android:id="@+id/doctor_name"/>
-                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/text_view_padding"
-                        android:textSize="15sp"
-                        android:text="Doc email"
-                        android:textColor="@android:color/white"
-                        android:id="@+id/doctor_email"/>
-                    <TextView
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin">
+                </HorizontalScrollView>
+
+                <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/text_view_padding"
-                        android:textSize="15sp"
-                        android:text="Doc phone"
-                        android:textColor="@android:color/white"
-                        android:id="@+id/doctor_phone"/>
+                        android:layout_marginTop="20dp">
+
+                    <Spinner
+                            android:id="@+id/spinner_start_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:popupBackground="@android:color/transparent"
+                            android:textSize="20sp" />
+
+                    <Spinner
+                            android:id="@+id/spinner_end_time"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:popupBackground="@android:color/transparent"
+                            android:textSize="20sp" />
                 </LinearLayout>
 
+                <TextView
+                        android:id="@+id/apptmnt_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:layout_margin="@dimen/activity_horizontal_margin"
+                        android:text="show the time slot selected"
+                        android:textSize="20sp" />
             </LinearLayout>
-
-            <!-- Booking time slots for which timings are available/booked-->
-            <HorizontalScrollView
-                android:id="@+id/time_slots"
-                android:layout_marginTop="@dimen/text_view_padding"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin">
-            </HorizontalScrollView>
-
-            <Spinner
-                android:id="@+id/spinner_select_doctor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:entries="@array/doctor_email"
-                android:entryValues="@array/doctor_email"
-                android:popupBackground="@android:color/transparent"
-                android:textSize="20sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp">
-
-                <Spinner
-                    android:id="@+id/spinner_start_time"
-                    android:layout_width="match_parent"
+            <Button
+                    android:id="@+id/req_apptmnt_button"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:popupBackground="@android:color/transparent"
-                    android:textSize="20sp" />
-
-                <Spinner
-                    android:id="@+id/spinner_end_time"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:popupBackground="@android:color/transparent"
-                    android:textSize="20sp" />
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/apptmnt_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/activity_horizontal_margin"
-                android:text="ss"
-                android:textColor="#ffffff"
-                android:textSize="20sp" />
+                    android:backgroundTint="@color/teal100"
+                    android:text="Request Appointment" />
         </LinearLayout>
-        <Button
-            android:id="@+id/req_apptmnt_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:backgroundTint="@color/tealA400"
-            android:text="Request Appointment" />
-    </LinearLayout>
-
+    </ScrollView>
 </FrameLayout>

@@ -32,30 +32,29 @@
         <item>"04:30AM to 05:00PM"</item>
         <item>"05:00PM to 05:30PM"</item>
         <item>"05:30PM to 06:00PM"</item>
-
     </string-array>
     <string-array name="book_time">
+        <item>"     "</item>
         <item>"08:00"</item>
         <item>"08:30"</item>
         <item>"09:00"</item>
         <item>"09:30"</item>
-        <item>"1000"</item>
-        <item>"1030"</item>
-        <item>"1100"</item>
-        <item>"1130"</item>
-        <item>"1200"</item>
-        <item>"1230"</item>
-        <item>"1300"</item>
-        <item>"1330"</item>
-
-        <item>"1400"</item>
-        <item>"1430"</item>
-        <item>"1500"</item>
-        <item>"1530"</item>
-        <item>"1600"</item>
-        <item>"1630"</item>
-        <item>"1700"</item>
-        <item>"1730"</item>
+        <item>"10:00"</item>
+        <item>"10:30"</item>
+        <item>"11:00"</item>
+        <item>"11:30"</item>
+        <item>"12:00"</item>
+        <item>"12:30"</item>
+        <item>"13:00"</item>
+        <item>"13:30"</item>
+        <item>"14:00"</item>
+        <item>"14:30"</item>
+        <item>"15:00"</item>
+        <item>"15:30"</item>
+        <item>"16:00"</item>
+        <item>"16:30"</item>
+        <item>"17:00"</item>
+        <item>"17:30"</item>
     </string-array>
 
     <string-array name="snooze_timing">

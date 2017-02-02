@@ -10,5 +10,6 @@ public class GroupHeaderItems {
     String phoneNum;
     String rating;
     String docEmail;
+    String doctorID;
     List<GroupChildItems> items = new ArrayList<GroupChildItems>();
 }

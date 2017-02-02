@@ -4,45 +4,41 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+import com.android.volley.*;
+import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.svs.myprojects.mymedicalrecords.Constants;
 import com.svs.myprojects.mymedicalrecords.R;
+import com.svs.myprojects.mymedicalrecords.patientrecord.utils.VolleyController;
 
 import java.lang.reflect.Type;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by snehalsutar on 2/18/16.
  */
 public class FragmentMakeAppointment extends Fragment {
-    Firebase mRef;
-    Button requestAptmntButton;
-    TextView apptmntText, mTextDocName, mTextDocEmail, mTextDocPhone;
-    ImageView mImageDoc;
-    Spinner spinnerStartTime, spinnerEndTime, spinnerSelectDoc;
-    String mStartTimeSelected, mEndTimeSelected;
-    String mDocEmailSelected;
-    HorizontalScrollView timeSlots;
-    Context mContext;
+    private Button requestAptmntButton;
+    private TextView apptmntText, mTextDocName, mTextDocEmail, mTextDocPhone;
+    private CalendarView mCalendarView;
+    private ImageView mImageDoc;
+    private Spinner spinnerStartTime, spinnerEndTime;
+    private String mStartTimeSelected, mEndTimeSelected;
+    private HorizontalScrollView timeSlots;
+    private Context mContext;
+    private AppointmentValues mAppointment = new AppointmentValues();
+
+    private static final String APPOINTMENT_URL = "http://rjtmobile.com/medictto/appointment_book.php?";
 
     @Nullable
     @Override
@@ -53,17 +49,22 @@ public class FragmentMakeAppointment extends Fragment {
         apptmntText = (TextView) rootView.findViewById(R.id.apptmnt_text);
         spinnerStartTime = (Spinner) rootView.findViewById(R.id.spinner_start_time);
         spinnerEndTime = (Spinner) rootView.findViewById(R.id.spinner_end_time);
-        spinnerSelectDoc = (Spinner) rootView.findViewById(R.id.spinner_select_doctor);
         timeSlots = (HorizontalScrollView) rootView.findViewById(R.id.time_slots);
         mTextDocName = (TextView) rootView.findViewById(R.id.doctor_name);
         mTextDocEmail = (TextView) rootView.findViewById(R.id.doctor_email);
         mTextDocPhone = (TextView) rootView.findViewById(R.id.doctor_phone);
         mImageDoc = (ImageView) rootView.findViewById(R.id.doctor_image);
+        mCalendarView = (CalendarView) rootView.findViewById(R.id.make_appointment_calendar);
+        getInfor();
         setSpinnerItems();
         setTimeSlots();
         setDoctorDetails(getArguments());
-
         return rootView;
+    }
+
+    private void getInfor() {
+        mAppointment.setPatientID("400");
+        mAppointment.setDoctorId("101");
     }
 
     @Override
@@ -81,6 +82,7 @@ public class FragmentMakeAppointment extends Fragment {
             groupHeaderItems = gson.fromJson(json, type);
         }
         if (groupHeaderItems != null) {
+            mAppointment.setDoctorId(groupHeaderItems.doctorID);
             mTextDocName.setText(groupHeaderItems.docName);
             mTextDocEmail.setText(groupHeaderItems.docEmail);
             mTextDocPhone.setText(groupHeaderItems.phoneNum);
@@ -95,17 +97,20 @@ public class FragmentMakeAppointment extends Fragment {
 
     private void setSpinnerItems() {
         String[] timeArray = getActivity().getResources().getStringArray(R.array.book_time);
-        ArrayAdapter<String> adapterST = new ArrayAdapter<String>(
+        ArrayAdapter<String> adapterST = new ArrayAdapter<>(
                 getActivity(), R.layout.spinner_list_item, timeArray);
         spinnerStartTime.setAdapter(adapterST);
+        ArrayAdapter<String> adapterET = new ArrayAdapter<>(
+                getActivity(), R.layout.spinner_list_item, timeArray);
+        spinnerEndTime.setAdapter(adapterET);
         spinnerStartTime.setOnItemSelectedListener(
                 new AdapterView.OnItemSelectedListener() {
                     @Override
                     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                         mStartTimeSelected = spinnerStartTime.getSelectedItem().toString();
-                        Toast.makeText(getActivity(),
-                                "You have selected " + spinnerStartTime.getSelectedItem().toString(),
-                                Toast.LENGTH_LONG).show();
+                        mAppointment.setStartTime(mStartTimeSelected);
+                        apptmntText.setText(mAppointment.toString());
+                        spinnerEndTime.setSelection(position + 1);
                     }
 
                     @Override
@@ -114,34 +119,13 @@ public class FragmentMakeAppointment extends Fragment {
                 }
         );
 
-        ArrayAdapter<String> adapterET = new ArrayAdapter<String>(
-                getActivity(), R.layout.spinner_list_item, timeArray);
-        spinnerEndTime.setAdapter(adapterET);
         spinnerEndTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 mEndTimeSelected = spinnerEndTime.getSelectedItem().toString();
-                Toast.makeText(getActivity(),
-                        "You have selected " + spinnerEndTime.getSelectedItem().toString(),
-                        Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-
-        ArrayAdapter<String> adapterDocList = new ArrayAdapter<String>(
-                getActivity(), R.layout.spinner_list_item, getActivity().getResources().getStringArray(R.array.doctor_name));
-        final String[] docEmail = getActivity().getResources().getStringArray(R.array.doctor_email);
-        spinnerSelectDoc.setAdapter(adapterDocList);
-        spinnerSelectDoc.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mDocEmailSelected = spinnerSelectDoc.getSelectedItem().toString();
-                Toast.makeText(getActivity(),
-                        "You have selected " + spinnerSelectDoc.getSelectedItem().toString() + " " + docEmail[position],
-                        Toast.LENGTH_LONG).show();
+                spinnerStartTime.setSelection(position - 1);
+                mAppointment.setEndTime(mEndTimeSelected);
+                apptmntText.setText(mAppointment.toString());
             }
 
             @Override
@@ -151,6 +135,7 @@ public class FragmentMakeAppointment extends Fragment {
     }
 
     private void setTimeSlots() {
+        // check data in web service
         LinearLayout linearLayoutHor = new LinearLayout(mContext);
         linearLayoutHor.setOrientation(LinearLayout.HORIZONTAL);
         linearLayoutHor.setLayoutParams(new LinearLayout.LayoutParams(
@@ -171,9 +156,9 @@ public class FragmentMakeAppointment extends Fragment {
             ImageView imageView = new ImageView(mContext);
             //setting image resource
 //        imageView.setImageResource(R.drawable.pill_baw);
-            imageView.setBackgroundColor(mContext.getResources().getColor(R.color.tealA200));
+            imageView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.teal200));
             if (i == 4 || i == 8) {
-                imageView.setBackgroundColor(mContext.getResources().getColor(R.color.colorGrey));
+                imageView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.teal900));
             }
             //setting image position
 //        imageView.setLayoutParams(new );
@@ -186,7 +171,7 @@ public class FragmentMakeAppointment extends Fragment {
             timeText.setLayoutParams(new LinearLayout.LayoutParams(mContext.getResources().getDimensionPixelSize(R.dimen.text_width),
                     LinearLayout.LayoutParams.WRAP_CONTENT));
             timeText.setText(timings[i]);
-            timeText.setTextColor(mContext.getResources().getColor(R.color.tealA100));
+            timeText.setTextColor(ContextCompat.getColor(mContext, R.color.secondary_text));
 //        timeText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
 
 
@@ -213,106 +198,111 @@ public class FragmentMakeAppointment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-
-        mRef = new Firebase("https://radiant-torch-9718.firebaseio.com/Doctor/2016/02/20    ");
-//        mRef = new Firebase("https://docs-examples.firebaseio.com/web/saving-data/fireblog/posts");
-
-        //Referencing the child node using a .child() on it's parent node
-//        mRef.child("fullName").child("svs").setValue("Alan Turing");
-//        mRef.child("birthYear").setValue(1912);
-        mRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                String dates = "";
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    AppointmentValues appointment = postSnapshot.getValue(AppointmentValues.class);
-                    dates = dates + appointment.getStartTime() + "   " + appointment.getEndTime() + "\n";
-                }
-                apptmntText.setText(" Booked Timings for seleced date are: \n" + dates);
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
-
         requestAptmntButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Firebase newRef = mRef.child(mStartTimeSelected);
-                AppointmentValues appointmentValues = new AppointmentValues(mStartTimeSelected, mEndTimeSelected, "SVS", "RED", "123", "U r good");
-                newRef.setValue(appointmentValues);
+                postAppointment();
+            }
+        });
+        mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
+                String s = "" + i + "-" + i1 + "-" + i2;
+                mAppointment.setDate(s);
             }
         });
     }
 
+    private void postAppointment() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, APPOINTMENT_URL, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String s) {
+                if (s.contains("Confirmed")) {
+                    Toast.makeText(mContext,"Appointment Confirmed", Toast.LENGTH_LONG).show();
+                    updateTimeSlot();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                VolleyLog.d("volley", "Error: " + volleyError.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> para = new HashMap<>();
+                para.put("patientID", mAppointment.getPatientID());
+                para.put("doctorID", mAppointment.getDoctorId());
+                para.put("startTime", mAppointment.getDate() + " " + mAppointment.getStartTime());
+                para.put("endTime", mAppointment.getDate() + " " + mAppointment.getEndTime());
+                return para;
+            }
+        };
+        VolleyController.getInstance().addToRequestQueue(stringRequest);
+    }
+
+    private void updateTimeSlot() {
+        setTimeSlots();
+    }
+
     public static class AppointmentValues {
-        String endTime;
-        String eventTitle;
-        String eventColor;
-        String key;
-        String note;
-        String startTime;
-
-        public AppointmentValues() {
-        }
-
-        public AppointmentValues(String startTime, String endTime, String eventTitle, String eventColor, String key, String note) {
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.eventTitle = eventTitle;
-            this.eventColor = eventColor;
-            this.key = key;
-            this.note = note;
-        }
-
-        public String getEventColor() {
-            return eventColor;
-        }
-
-        public void setEventColor(String eventColor) {
-            this.eventColor = eventColor;
-        }
-
-        public String getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(String startTime) {
-            this.startTime = startTime;
-        }
+        private String mEndTime;
+        private String mStartTime;
+        private String mDoctorId;
+        private String mPatientID;
+        private String mDate;
 
         public String getEndTime() {
-            return endTime;
+            return mEndTime;
         }
 
         public void setEndTime(String endTime) {
-            this.endTime = endTime;
+            mEndTime = endTime;
         }
 
-        public String getEventTitle() {
-            return eventTitle;
+        public String getStartTime() {
+            return mStartTime;
         }
 
-        public void setEventTitle(String eventTitle) {
-            this.eventTitle = eventTitle;
+        public void setStartTime(String startTime) {
+            mStartTime = startTime;
         }
 
-        public String getKey() {
-            return key;
+        public String getDoctorId() {
+            return mDoctorId;
         }
 
-        public void setKey(String key) {
-            this.key = key;
+        public void setDoctorId(String doctorId) {
+            mDoctorId = doctorId;
         }
 
-        public String getNote() {
-            return note;
+        public String getPatientID() {
+            return mPatientID;
         }
 
-        public void setNote(String note) {
-            this.note = note;
+        public void setPatientID(String patientID) {
+            mPatientID = patientID;
+        }
+
+        public String getDate() {
+            return mDate;
+        }
+
+        public void setDate(String date) {
+            mDate = date;
+        }
+
+        @Override
+        public String toString() {
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Your Appointment");
+            stringBuilder.append("\n");
+            stringBuilder.append("Date: " + mDate);
+            stringBuilder.append("\n");
+            stringBuilder.append("Start: " + mStartTime);
+            stringBuilder.append("\n");
+            stringBuilder.append("End: " + mEndTime);
+            return stringBuilder.toString();
         }
     }
 }

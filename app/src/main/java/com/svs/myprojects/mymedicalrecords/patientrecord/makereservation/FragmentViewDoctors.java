@@ -1,10 +1,12 @@
 package com.svs.myprojects.mymedicalrecords.patientrecord.makereservation;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,23 +18,32 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.*;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.squareup.picasso.Picasso;
 import com.svs.myprojects.mymedicalrecords.R;
+import com.svs.myprojects.mymedicalrecords.patientrecord.utils.VolleyController;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by snehalsutar on 3/1/16.
  */
 
 public class FragmentViewDoctors extends Fragment implements AdapterView.OnItemClickListener {
-
-    View mRootView;
-    ArrayList<DoctorDetail> arrayList;
+    private static final String BASE_URL = "http://rjtmobile.com/medictto/find_doctor.php?";
+    private View mRootView;
+    private ArrayList<DoctorDetail> arrayList;
     private AnimatedExpandableListView listView;
     private ExampleAdapter adapter;
-    Context mContext;
+    private Context mContext;
+    private String area, speciality;
 
     @Nullable
     @Override
@@ -40,31 +51,104 @@ public class FragmentViewDoctors extends Fragment implements AdapterView.OnItemC
         mRootView = inflater.inflate(R.layout.fragment_view_doctor_list, container, false);
         mContext = getActivity();
         arrayList = new ArrayList<>();
-        fillArrayList();
+        // get data from bundle
+        area = "1";
+        speciality = "1";
+        getData();
         return mRootView;
     }
 
-    private void fillArrayList() {
-        String[] docName = getActivity().getResources().getStringArray(R.array.doctor_name);
-        String[] docEmail = getActivity().getResources().getStringArray(R.array.doctor_email);
-        String[] docImage = getActivity().getResources().getStringArray(R.array.doctor_image);
-        String[] docSpec = getActivity().getResources().getStringArray(R.array.doctor_speciality);
-        String[] docQual = getActivity().getResources().getStringArray(R.array.doctor_qualification);
 
-        for (int i = 0; i < docName.length; i++) {
-            arrayList.add(new DoctorDetail(docName[i], docSpec[i], docQual[i],
-                    docImage[i], "", "", "+1 888 999 7777", docEmail[i], "5"
-            /*this.doctorName = doctorName;
-            this.doctorSpeciality = doctorSpeciality;
-            this.doctorQualification = doctorQualification;
-            this.imageUrl = imageUrl;
-            this.operationHours = operationHours;
-            this.address = address;
-            this.phoneNum = phoneNum;
-            this.emailId = emailId;*/
-            ));
+    private void getData() {
+        final ProgressDialog pDialog = new ProgressDialog(mContext);
+        pDialog.setMessage("Loading...");
+        pDialog.show();
+        String url = BASE_URL;
+        if (area != null) {
+            url += "&location_id=" + area;
         }
+        if (speciality != null) {
+            url += "&specialization_id=" + speciality;
+        }
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                pDialog.dismiss();
+                try {
+                    JSONArray array = jsonObject.getJSONArray("doctor_details");
+                    for (int i = 0; i < array.length(); i++) {
+                        DoctorDetail doctorDetail = new DoctorDetail();
+                        doctorDetail.setArea(area);
+                        doctorDetail.setDoctorSpeciality(speciality);
+                        try {
+                            JSONObject obj = array.getJSONObject(i);
+                            Log.d("volley", obj.toString());
+                            try {
+                                doctorDetail.setDoctorID(obj.getString("doctor_id"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                doctorDetail.setDoctorName(obj.getString("doctor_name"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                doctorDetail.setEmail(obj.getString("doctor_email"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                doctorDetail.setPhoneNum(obj.getString("doctor_phone"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                doctorDetail.setExperience(obj.getString("Experience"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                doctorDetail.setDoctorQualification(obj.getString("Qualification"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                doctorDetail.setImageUrl(obj.getString("DoctorsPhoto"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                doctorDetail.setAddress(obj.getString("Address"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                doctorDetail.setRating(obj.getString("Rating"));
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        arrayList.add(doctorDetail);
+                    }
+                    fillArrayList();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                pDialog.dismiss();
+                VolleyLog.d("volley", "Error: " + volleyError.getMessage());
+            }
+        });
+        VolleyController.getInstance().addToRequestQueue(jsonObjectRequest);
+    }
 
+    private void fillArrayList() {
         List<GroupHeaderItems> items = new ArrayList<>();
         for (int i = 0; i < arrayList.size(); i++) {
             GroupHeaderItems item = new GroupHeaderItems();
@@ -74,31 +158,15 @@ public class FragmentViewDoctors extends Fragment implements AdapterView.OnItemC
             item.qualification = arrayList.get(i).getDoctorQualification();
             item.rating = arrayList.get(i).getRating();
             item.phoneNum = arrayList.get(i).getPhoneNum();
-            item.docEmail = arrayList.get(i).getEmailId();
-
+            item.docEmail = arrayList.get(i).getEmail();
+            item.doctorID = arrayList.get(i).getDoctorID();
             GroupChildItems child = new GroupChildItems();
-//            child.title = "Awesome item ";
+            child.address = arrayList.get(i).getAddress();
 //            child.hint = "Too awesome";
             item.items.add(child);
 
             items.add(item);
         }
-        /*// Populate our list with groups and it's children
-        for (int i = 1; i < 100; i++) {
-            GroupItem item = new GroupItem();
-
-            item.title = "Group " + i;
-
-            for (int j = 0; j < i; j++) {
-                ChildItem child = new ChildItem();
-                child.title = "Awesome item " + j;
-                child.hint = "Too awesome";
-
-                item.items.add(child);
-            }
-
-            items.add(item);
-        }*/
 
         adapter = new ExampleAdapter(getActivity());
         adapter.setData(items);
@@ -131,9 +199,6 @@ public class FragmentViewDoctors extends Fragment implements AdapterView.OnItemC
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(R.string.frag_title_view_doctors);
-        /*ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.doctor_name, android.R.layout.simple_list_item_1);
-        setListAdapter(adapter);
-        getListView().setOnItemClickListener(this);*/
     }
 
     @Override
@@ -142,33 +207,6 @@ public class FragmentViewDoctors extends Fragment implements AdapterView.OnItemC
                 .show();
     }
 }
-
-class FragmentViewAdapter extends BaseAdapter {
-
-    public FragmentViewAdapter() {
-    }
-
-    @Override
-    public int getCount() {
-        return 0;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
-    }
-}
-
 
 class ExampleAdapter extends AnimatedExpandableListView.AnimatedExpandableListAdapter {
     private LayoutInflater inflater;
@@ -204,7 +242,7 @@ class ExampleAdapter extends AnimatedExpandableListView.AnimatedExpandableListAd
         if (convertView == null) {
             holder = new GroupChildHolder();
             convertView = inflater.inflate(R.layout.frag_doc_list_item, parent, false);
-//            holder.title = (TextView) convertView.findViewById(R.id.textTitle);
+           holder.address = (TextView) convertView.findViewById(R.id.doc_address);
 //            holder.hint = (TextView) convertView.findViewById(R.id.textHint);
             holder.buttonBookAppointment = (Button) convertView.findViewById(R.id.button_book_appointment);
             convertView.setTag(holder);
@@ -212,8 +250,7 @@ class ExampleAdapter extends AnimatedExpandableListView.AnimatedExpandableListAd
             holder = (GroupChildHolder) convertView.getTag();
         }
 
-//        holder.title.setText(item.title);
-//        holder.hint.setText(item.hint);
+        holder.address.setText(item.address);
         holder.buttonBookAppointment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -289,25 +326,4 @@ class ExampleAdapter extends AnimatedExpandableListView.AnimatedExpandableListAd
 
 }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        // Handle action bar item clicks here. The action bar will
-//        // automatically handle clicks on the Home/Up button, so long
-//        // as you specify a parent activity in AndroidManifest.xml.
-//        int id = item.getItemId();
-//
-//        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            return true;
-//        }
-//
-//        return super.onOptionsItemSelected(item);
-//    }
 

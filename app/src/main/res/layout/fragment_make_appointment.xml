@@ -57,13 +57,26 @@
                                 android:text="Doc phone"
                                 android:id="@+id/doctor_phone"/>
                     </LinearLayout>
-
                 </LinearLayout>
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+                    <View
+                            android:layout_margin="@dimen/activity_vertical_margin"
+                            android:background="@android:color/darker_gray"
+                            android:layout_width="match_parent" android:layout_height="1dp"/>
+                </LinearLayout>
+                <TextView
+                        android:clickable="true"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:textStyle="bold"
+                        android:layout_gravity="end"
+                        android:id="@+id/make_appointment_show_calendar"
+                        android:text="Calendar"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
                 <CalendarView
                         android:id="@+id/make_appointment_calendar"
                         android:minDate="01/01/2017"
                         android:maxDate="12/31/2017"
-                        android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                        android:layout_width="match_parent" android:layout_height="300dp"/>
 
                 <!-- Booking time slots for which timings are available/booked-->
                 <HorizontalScrollView
@@ -75,39 +88,39 @@
                         android:layout_marginRight="@dimen/activity_horizontal_margin">
                 </HorizontalScrollView>
 
-                <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp">
-
-                    <Spinner
-                            android:id="@+id/spinner_start_time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:popupBackground="@android:color/transparent"
-                            android:textSize="20sp" />
-
-                    <Spinner
-                            android:id="@+id/spinner_end_time"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_weight="1"
-                            android:popupBackground="@android:color/transparent"
-                            android:textSize="20sp" />
+                <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+                    <View
+                            android:layout_margin="@dimen/activity_vertical_margin"
+                            android:background="@android:color/darker_gray"
+                            android:layout_width="match_parent" android:layout_height="1dp"/>
                 </LinearLayout>
 
                 <TextView
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:text="Your Appointment"
+                        android:textSize="20sp" />
+                <TextView
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
                         android:id="@+id/apptmnt_text"
                         android:layout_width="match_parent"
-                        android:layout_height="120dp"
-                        android:layout_margin="@dimen/activity_horizontal_margin"
+                        android:layout_height="22dp"
                         android:text="show the time slot selected"
-                        android:textSize="20sp" />
+                        android:textSize="16sp" />
+                <TextView
+                        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                        android:layout_marginRight="@dimen/activity_horizontal_margin"
+                        android:id="@+id/apptmnt_time_slot"
+                        android:layout_width="match_parent"
+                        android:layout_height="22dp"
+                        android:text="time slot"
+                        android:textSize="16sp" />
             </LinearLayout>
             <Button
+                    android:layout_margin="@dimen/activity_vertical_margin"
                     android:id="@+id/req_apptmnt_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

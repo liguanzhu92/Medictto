@@ -12,15 +12,24 @@ import android.view.ViewGroup;
 import android.widget.*;
 
 import com.android.volley.*;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.JsonRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.svs.myprojects.mymedicalrecords.Constants;
 import com.svs.myprojects.mymedicalrecords.R;
 import com.svs.myprojects.mymedicalrecords.patientrecord.utils.VolleyController;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,16 +38,18 @@ import java.util.Map;
  */
 public class FragmentMakeAppointment extends Fragment {
     private Button requestAptmntButton;
-    private TextView apptmntText, mTextDocName, mTextDocEmail, mTextDocPhone;
+    private TextView apptmntText, apptmntSlot, mTextDocName, mTextDocEmail, mTextDocPhone;
     private CalendarView mCalendarView;
     private ImageView mImageDoc;
-    private Spinner spinnerStartTime, spinnerEndTime;
+/*    private Spinner spinnerStartTime, spinnerEndTime;*/
     private String mStartTimeSelected, mEndTimeSelected;
     private HorizontalScrollView timeSlots;
     private Context mContext;
     private AppointmentValues mAppointment = new AppointmentValues();
-
-    private static final String APPOINTMENT_URL = "http://rjtmobile.com/medictto/appointment_book.php?";
+    private String[] mSlots = new String[13];
+    private static final String TIME_SLOT = "http://rjtmobile.com/medictto/appointment_available.php?&";
+    // http://rjtmobile.com/medictto/appointment_available.php?&doctorID=101&currentdate=2017-02-07
+    private static final String APPOINTMENT_URL = "http://rjtmobile.com/medictto/appointment_book.php?&";
 
     @Nullable
     @Override
@@ -47,24 +58,65 @@ public class FragmentMakeAppointment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_make_appointment, container, false);
         requestAptmntButton = (Button) rootView.findViewById(R.id.req_apptmnt_button);
         apptmntText = (TextView) rootView.findViewById(R.id.apptmnt_text);
-        spinnerStartTime = (Spinner) rootView.findViewById(R.id.spinner_start_time);
-        spinnerEndTime = (Spinner) rootView.findViewById(R.id.spinner_end_time);
+        apptmntSlot = (TextView) rootView.findViewById(R.id.apptmnt_time_slot);
+/*        spinnerStartTime = (Spinner) rootView.findViewById(R.id.spinner_start_time);
+        spinnerEndTime = (Spinner) rootView.findViewById(R.id.spinner_end_time);*/
         timeSlots = (HorizontalScrollView) rootView.findViewById(R.id.time_slots);
         mTextDocName = (TextView) rootView.findViewById(R.id.doctor_name);
         mTextDocEmail = (TextView) rootView.findViewById(R.id.doctor_email);
         mTextDocPhone = (TextView) rootView.findViewById(R.id.doctor_phone);
         mImageDoc = (ImageView) rootView.findViewById(R.id.doctor_image);
         mCalendarView = (CalendarView) rootView.findViewById(R.id.make_appointment_calendar);
-        getInfor();
-        setSpinnerItems();
-        setTimeSlots();
+        // String date = "2017-02-07";
+        Calendar calendar = Calendar.getInstance();
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String date = dateFormat.format(calendar.getTime());
+        getInfor(date);
         setDoctorDetails(getArguments());
         return rootView;
     }
 
-    private void getInfor() {
+    private void getInfor(String date) {
         mAppointment.setPatientID("400");
         mAppointment.setDoctorId("101");
+        // get slot infor
+        apptmntText.setText(date);
+        String url = TIME_SLOT + "&doctorID=" + mAppointment.getDoctorId() + "&currentdate=" + date;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject jsonObject) {
+                try {
+                    JSONArray array = jsonObject.getJSONArray("appointment slot");
+                    JSONObject object = array.getJSONObject(0);
+                    VolleyLog.d("volley", object);
+                    mSlots[1] = object.getString("slot_1");
+                    mSlots[2] = object.getString("slot_2");
+                    mSlots[3] = object.getString("slot_3");
+                    mSlots[4] = object.getString("slot_4");
+                    mSlots[5] = object.getString("slot_5");
+                    mSlots[6] = object.getString("slot_6");
+                    mSlots[7] = object.getString("slot_7");
+                    mSlots[8] = object.getString("slot_8");
+                    mSlots[9] = object.getString("slot_9");
+                    mSlots[10] = object.getString("slot_10");
+                    mSlots[11] = object.getString("slot_11");
+                    mSlots[12] = object.getString("slot_12");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                setTimeSlots();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                VolleyLog.d("volley", "Error: " + volleyError.getMessage());
+                for (int i = 0; i < mSlots.length; i++) {
+                    mSlots[i] = "1";
+                }
+                setTimeSlots();
+            }
+        });
+        VolleyController.getInstance().addToRequestQueue(jsonObjectRequest);
     }
 
     @Override
@@ -95,45 +147,6 @@ public class FragmentMakeAppointment extends Fragment {
         }
     }
 
-    private void setSpinnerItems() {
-        String[] timeArray = getActivity().getResources().getStringArray(R.array.book_time);
-        ArrayAdapter<String> adapterST = new ArrayAdapter<>(
-                getActivity(), R.layout.spinner_list_item, timeArray);
-        spinnerStartTime.setAdapter(adapterST);
-        ArrayAdapter<String> adapterET = new ArrayAdapter<>(
-                getActivity(), R.layout.spinner_list_item, timeArray);
-        spinnerEndTime.setAdapter(adapterET);
-        spinnerStartTime.setOnItemSelectedListener(
-                new AdapterView.OnItemSelectedListener() {
-                    @Override
-                    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                        mStartTimeSelected = spinnerStartTime.getSelectedItem().toString();
-                        mAppointment.setStartTime(mStartTimeSelected);
-                        apptmntText.setText(mAppointment.toString());
-                        spinnerEndTime.setSelection(position + 1);
-                    }
-
-                    @Override
-                    public void onNothingSelected(AdapterView<?> parent) {
-                    }
-                }
-        );
-
-        spinnerEndTime.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mEndTimeSelected = spinnerEndTime.getSelectedItem().toString();
-                spinnerStartTime.setSelection(position - 1);
-                mAppointment.setEndTime(mEndTimeSelected);
-                apptmntText.setText(mAppointment.toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-            }
-        });
-    }
-
     private void setTimeSlots() {
         // check data in web service
         LinearLayout linearLayoutHor = new LinearLayout(mContext);
@@ -157,7 +170,7 @@ public class FragmentMakeAppointment extends Fragment {
             //setting image resource
 //        imageView.setImageResource(R.drawable.pill_baw);
             imageView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.teal200));
-            if (i == 4 || i == 8) {
+            if (mSlots[i+1].equals("1")) {
                 imageView.setBackgroundColor(ContextCompat.getColor(mContext, R.color.teal900));
             }
             //setting image position
@@ -165,7 +178,7 @@ public class FragmentMakeAppointment extends Fragment {
             imageView.setLayoutParams(new LinearLayout.LayoutParams(
                     mContext.getResources().getDimensionPixelSize(R.dimen.image_width),
                     mContext.getResources().getDimensionPixelSize(R.dimen.image_height)));
-            imageView.setOnClickListener(clickImage(timings[i]));
+            imageView.setOnClickListener(clickImage(i, timings[i]));
 
             TextView timeText = new TextView(mContext);
             timeText.setLayoutParams(new LinearLayout.LayoutParams(mContext.getResources().getDimensionPixelSize(R.dimen.text_width),
@@ -181,16 +194,26 @@ public class FragmentMakeAppointment extends Fragment {
             linearLayoutHor.addView(linearLayout);
 
         }
+        timeSlots.removeAllViews();
         timeSlots.addView(linearLayoutHor);
         //make visible to program
 //        setContentView(linearLayout);
     }
 
-    private View.OnClickListener clickImage(final String time) {
+    private View.OnClickListener clickImage(final int i, final String interval) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, time, Toast.LENGTH_LONG).show();
+                // Toast.makeText(mContext, time, Toast.LENGTH_LONG).show();
+                if (mSlots[i].equals("1")) {
+                    Toast.makeText(getContext(), "Not Available", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                String[] startTime;
+                startTime = getActivity().getResources().getStringArray(R.array.book_time);
+                mAppointment.setStartTime(startTime[i]);
+                mAppointment.setEndTime(startTime[i+1]);
+                apptmntSlot.setText(interval);
             }
         };
     }
@@ -207,14 +230,30 @@ public class FragmentMakeAppointment extends Fragment {
         mCalendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView calendarView, int i, int i1, int i2) {
-                String s = "" + i + "-" + i1 + "-" + i2;
+                i1++;
+                String month;
+                if (i1 < 10) {
+                    month = "0" + i1;
+                } else {
+                    month = String.valueOf(i1);
+                }
+                String day;
+                if (i1 < 10) {
+                    day = "0" + i2;
+                } else {
+                    day = String.valueOf(i2);
+                }
+                String s = "" + i + "-" + month + "-" + day;
                 mAppointment.setDate(s);
+                getInfor(s);
             }
         });
     }
 
     private void postAppointment() {
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, APPOINTMENT_URL, new Response.Listener<String>() {
+        String url = APPOINTMENT_URL + "patientID=" + mAppointment.getPatientID() + "&doctorID=" + mAppointment.getDoctorId()
+                + "&startTime=" + mAppointment.getStartTime() + "&endTime=" + mAppointment.getEndTime();
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String s) {
                 if (s.contains("Confirmed")) {
@@ -227,17 +266,7 @@ public class FragmentMakeAppointment extends Fragment {
             public void onErrorResponse(VolleyError volleyError) {
                 VolleyLog.d("volley", "Error: " + volleyError.getMessage());
             }
-        }) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> para = new HashMap<>();
-                para.put("patientID", mAppointment.getPatientID());
-                para.put("doctorID", mAppointment.getDoctorId());
-                para.put("startTime", mAppointment.getDate() + " " + mAppointment.getStartTime());
-                para.put("endTime", mAppointment.getDate() + " " + mAppointment.getEndTime());
-                return para;
-            }
-        };
+        });
         VolleyController.getInstance().addToRequestQueue(stringRequest);
     }
 

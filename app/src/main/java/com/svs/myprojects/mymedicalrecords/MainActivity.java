@@ -10,9 +10,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import com.svs.myprojects.mymedicalrecords.doctor.DoctorMainActivity;
 import com.svs.myprojects.mymedicalrecords.patientrecord.PatientRecord;
 
 public class MainActivity extends AppCompatActivity {
+
+    private RadioGroup mRadioGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
+        mRadioGroup = (RadioGroup) findViewById(R.id.login_group);
     }
 
     @Override
@@ -56,8 +61,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void next_button_function(View view) {
-        Intent intent = new Intent(MainActivity.this, PatientRecord.class);
-        startActivity(intent);
+        int selectedId = mRadioGroup.getCheckedRadioButtonId();
+        if (selectedId == R.id.login_patient) {
+            Intent intent = new Intent(MainActivity.this, PatientRecord.class);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(MainActivity.this, DoctorMainActivity.class);
+            startActivity(intent);
+        }
+
     }
 
 }

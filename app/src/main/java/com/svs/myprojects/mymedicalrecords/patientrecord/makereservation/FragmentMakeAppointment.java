@@ -21,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.svs.myprojects.mymedicalrecords.Constants;
 import com.svs.myprojects.mymedicalrecords.R;
+import com.svs.myprojects.mymedicalrecords.doctor.utils.AppointmentValues;
 import com.svs.myprojects.mymedicalrecords.patientrecord.utils.VolleyController;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -274,64 +275,4 @@ public class FragmentMakeAppointment extends Fragment {
         setTimeSlots();
     }
 
-    public static class AppointmentValues {
-        private String mEndTime;
-        private String mStartTime;
-        private String mDoctorId;
-        private String mPatientID;
-        private String mDate;
-
-        public String getEndTime() {
-            return mEndTime;
-        }
-
-        public void setEndTime(String endTime) {
-            mEndTime = endTime;
-        }
-
-        public String getStartTime() {
-            return mStartTime;
-        }
-
-        public void setStartTime(String startTime) {
-            mStartTime = startTime;
-        }
-
-        public String getDoctorId() {
-            return mDoctorId;
-        }
-
-        public void setDoctorId(String doctorId) {
-            mDoctorId = doctorId;
-        }
-
-        public String getPatientID() {
-            return mPatientID;
-        }
-
-        public void setPatientID(String patientID) {
-            mPatientID = patientID;
-        }
-
-        public String getDate() {
-            return mDate;
-        }
-
-        public void setDate(String date) {
-            mDate = date;
-        }
-
-        @Override
-        public String toString() {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("Your Appointment");
-            stringBuilder.append("\n");
-            stringBuilder.append("Date: " + mDate);
-            stringBuilder.append("\n");
-            stringBuilder.append("Start: " + mStartTime);
-            stringBuilder.append("\n");
-            stringBuilder.append("End: " + mEndTime);
-            return stringBuilder.toString();
-        }
-    }
 }

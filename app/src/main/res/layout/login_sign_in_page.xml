@@ -72,6 +72,21 @@
     </LinearLayout>
     <!-- *********************************************************************************** -->
     <!-- NEXT BUTTON-->
+    <RadioGroup
+            android:id="@+id/login_group"
+            android:orientation="horizontal"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+        <RadioButton
+                android:id="@+id/login_patient"
+                android:text="Patient"
+                android:layout_weight="1"
+                android:layout_width="0dp" android:layout_height="wrap_content"/>
+        <RadioButton
+                android:id="@+id/login_doctor"
+                android:text="Doctor"
+                android:layout_weight="1"
+                android:layout_width="0dp" android:layout_height="wrap_content"/>
+    </RadioGroup>
     <Button
         style="@style/ButtonStyle"
         android:layout_width="match_parent"

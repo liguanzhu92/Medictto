@@ -1,0 +1,112 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              tools:context="com.svs.myprojects.mymedicalrecords.doctor.arrange.WorkPlanFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <ScrollView android:layout_width="match_parent" android:layout_height="match_parent">
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+            <TextView
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:gravity="center"
+                    android:fontFamily="monospace"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Calendar"/>
+            <CalendarView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/work_calendarView"/>
+            <TextView
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:gravity="center"
+                    android:fontFamily="monospace"
+                    android:text="Date Selected"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <LinearLayout
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent" android:layout_height="wrap_content">
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot1"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot2"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot3"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot4"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot5"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot6"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot7"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot8"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot9"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot10"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot11"/>
+                <CheckBox
+                        android:text="CheckBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" android:id="@+id/work_slot12"/>
+            </LinearLayout>
+            <LinearLayout
+                    android:paddingTop="@dimen/activity_vertical_margin"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent" android:layout_height="wrap_content">
+                <Button
+                        android:backgroundTint="@color/colorAccent"
+                        android:textColor="@android:color/white"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginRight="8dp"
+                        android:layout_gravity="center"
+                        android:text="Confirm"
+                        android:id="@+id/work_confirm"
+                        android:layout_weight="1"
+                        android:layout_width="0dp" android:layout_height="wrap_content"/>
+                <Button
+                        android:backgroundTint="@color/colorAccent"
+                        android:textColor="@android:color/white"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginRight="16dp"
+                        android:layout_weight="1"
+                        android:layout_gravity="center"
+                        android:text="Confirm"
+                        android:id="@+id/work_cancel"
+                        android:layout_width="0dp" android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

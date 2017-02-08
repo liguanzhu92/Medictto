@@ -2,6 +2,7 @@ package com.svs.myprojects.mymedicalrecords.doctor.appointment;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,9 +44,11 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentHolder> 
     @Override
     public void onBindViewHolder(AppointmentHolder holder, final int position) {
         final AppointmentValues appointment = mConfirmedList.get(position);
+        Log.d("set", appointment.toString());
         holder.mTextPatientID.setText(appointment.getPatientID());
         holder.mTextDate.setText(appointment.getDate());
-        holder.mTextSlot.setText(timeSlots[position]);
+        int p = appointment.getSlots();
+        holder.mTextSlot.setText(timeSlots[p]);
         holder.mImageCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -79,13 +82,12 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentHolder> 
     private void removeItem(int position) {
         mConfirmedList.remove(position);
         notifyItemChanged(position, mConfirmedList);
-        notifyAll();
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mConfirmedList.size();
     }
 }
 

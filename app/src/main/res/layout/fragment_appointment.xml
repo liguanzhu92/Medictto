@@ -17,9 +17,11 @@
                 android:layout_weight="5"
                 android:layout_width="0dp" android:layout_height="wrap_content">
             <TextView
+                    android:id="@+id/apnt_year"
                     android:text="2017"
                     android:layout_width="match_parent" android:layout_height="wrap_content"/>
             <TextView
+                    android:id="@+id/apnt_day"
                     android:layout_marginLeft="@dimen/activity_horizontal_margin"
                     android:textColor="@android:color/white"
                     android:textStyle="bold"
@@ -33,6 +35,7 @@
                 android:layout_width="0dp" android:layout_height="match_parent">
             <ImageView
                     android:clickable="true"
+                    android:id="@+id/apnt_show"
                     android:tint="@color/colorWhite"
                     android:src="@drawable/ic_calendar"
                     android:layout_width="32dp" android:layout_height="32dp"/>
@@ -40,10 +43,10 @@
     </LinearLayout>
     <CalendarView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/c"/>
+            android:layout_height="wrap_content" android:id="@+id/apnt_calendar"/>
     <android.support.v7.widget.RecyclerView
             android:id="@+id/apnt_container"
             android:layout_width="match_parent"
-                                            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"/>
 
 </LinearLayout>

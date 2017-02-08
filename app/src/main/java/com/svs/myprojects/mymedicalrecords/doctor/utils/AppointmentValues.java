@@ -11,7 +11,7 @@ public class AppointmentValues {
     private String mPatientID;
     private String mDate;
     private String mStatus;
-    private String mSlots;
+    private int mSlots;
 
     public String getNumber() {
         return mNumber;
@@ -69,11 +69,11 @@ public class AppointmentValues {
         mStatus = status;
     }
 
-    public String getSlots() {
+    public int getSlots() {
         return mSlots;
     }
 
-    public void setSlots(String slots) {
+    public void setSlots(int slots) {
         mSlots = slots;
     }
 

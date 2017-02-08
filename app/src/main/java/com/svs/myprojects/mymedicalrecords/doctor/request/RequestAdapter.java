@@ -46,7 +46,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestHolder>{
         final AppointmentValues  appointment = mRequestList.get(position);
         holder.mTextPatientID.setText(appointment.getPatientID());
         holder.mTextDate.setText(appointment.getDate());
-        holder.mTextSlot.setText(timeSlots[position]);
+        int p = appointment.getSlots();
+        holder.mTextSlot.setText(timeSlots[p]);
         holder.mImageConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -86,7 +87,6 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestHolder>{
     private void removeItem(int position) {
         mRequestList.remove(position);
         notifyItemChanged(position, mRequestList);
-        notifyAll();
         notifyDataSetChanged();
     }
 

@@ -24,6 +24,7 @@
         <item>"04:00PM to 05:00PM"</item>
         <item>"05:00PM to 06:00PM"</item>
         <item>"06:00PM to 07:00PM"</item>
+        <item>"Invalid time"</item>
     </string-array>
     <string-array name="book_time">
         <item>"     "</item>

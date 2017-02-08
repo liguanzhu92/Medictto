@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.svs.myprojects.mymedicalrecords.R;
+import com.svs.myprojects.mymedicalrecords.doctor.utils.RefreshLists;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,6 +25,7 @@ public class DoctorHomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        new RefreshLists().refreshData("101");
         return inflater.inflate(R.layout.fragment_doctor_home, container, false);
     }
 

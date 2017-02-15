@@ -4,18 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/teal700"
+    android:background="@color/colorPrimaryLight"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.svs.myprojects.mymedicalrecords.MainActivity"
     tools:showIn="@layout/activity_main">
-
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:alpha="0.3"
-        android:background="@drawable/medicine"
-        android:scaleType="centerCrop" />
-
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/logo"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"/>
     <include layout="@layout/login_sign_in_page" />
+
 
 </FrameLayout>

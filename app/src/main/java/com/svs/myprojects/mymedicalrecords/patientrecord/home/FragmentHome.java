@@ -21,7 +21,6 @@ import com.svs.myprojects.mymedicalrecords.R;
 public class FragmentHome extends Fragment {
     TextView mWelcomeText ;
     Context mContext;
-    AnimatorSet animatorSetForRadioGroup;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,14 +36,10 @@ public class FragmentHome extends Fragment {
     public void onResume() {
         super.onResume();
 
-        animatorSetForRadioGroup = (AnimatorSet) AnimatorInflater.loadAnimator(mContext, R.animator.flip_horizontal);
-        animatorSetForRadioGroup.setTarget(mWelcomeText);
-        animatorSetForRadioGroup.start();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        animatorSetForRadioGroup.end();
     }
 }

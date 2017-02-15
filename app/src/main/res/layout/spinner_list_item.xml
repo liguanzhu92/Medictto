@@ -8,7 +8,6 @@
     android:text="sss"
     android:textSize="20sp"
     android:background="@drawable/text_background"
-    android:textColor="@android:color/white"
     android:padding="@dimen/text_view_padding"
     android:layout_margin="@dimen/activity_horizontal_margin"
     android:textAlignment="center" />

@@ -100,6 +100,9 @@ public class PatientRecord extends AppCompatActivity implements PatientRecordToA
                     case 5:
                         replaceFragment(new FragmentRequestMedLoc());
                         break;
+                    case 6:
+                        finish();
+                        break;
                     default:
                         replaceFragment(new FragmentHome());
                         break;

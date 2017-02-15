@@ -158,7 +158,7 @@ public class FragmentMakeAppointment extends Fragment {
         String[] timings = mContext.getResources().getStringArray(R.array.timings_array);
 
 
-        for (int i = 0; i < timings.length; i++) {
+        for (int i = 0; i < timings.length - 1; i++) {
             LinearLayout linearLayout = new LinearLayout(mContext);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
 

@@ -50,10 +50,10 @@ public class WorkPlanFragment extends Fragment {
         timeSlots =  getContext().getResources().getStringArray(R.array.timings_array);
         initialView();
         setListener();
-        String date = "2017-02-07";
+        // String date = "2017-02-07";
         Calendar calendar = Calendar.getInstance();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        //String date = dateFormat.format(calendar.getTime());
+        String date = dateFormat.format(calendar.getTime());
         getInfor(date);
         return rootView;
     }
@@ -112,7 +112,7 @@ public class WorkPlanFragment extends Fragment {
                     month = String.valueOf(i1);
                 }
                 String day;
-                if (i1 < 10) {
+                if (i2 < 10) {
                     day = "0" + i2;
                 } else {
                     day = String.valueOf(i2);
@@ -126,7 +126,7 @@ public class WorkPlanFragment extends Fragment {
     private void getInfor(String date) {
         String doctorID = "101";
         // get slot infor
-        date = "2017-02-07";
+        // date = "2017-02-07";
         String url = TIME_SLOT + "&doctorID=" + doctorID + "&currentdate=" + date;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
             @Override
@@ -192,6 +192,18 @@ public class WorkPlanFragment extends Fragment {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 VolleyLog.d("volley", "Error: " + volleyError.getMessage());
+                mCheck1.setChecked(false);
+                mCheck2.setChecked(false);
+                mCheck3.setChecked(false);
+                mCheck4.setChecked(false);
+                mCheck5.setChecked(false);
+                mCheck6.setChecked(false);
+                mCheck7.setChecked(false);
+                mCheck8.setChecked(false);
+                mCheck9.setChecked(false);
+                mCheck10.setChecked(false);
+                mCheck11.setChecked(false);
+                mCheck12.setChecked(false);
             }
         });
         VolleyController.getInstance().addToRequestQueue(jsonObjectRequest);
